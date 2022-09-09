@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Test Scene 1.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Test Scene 2.unity
+    guid: ebabc081151cbac43bde9bd12056233e
+  - enabled: 1
+    path: Assets/BaridaGames/Vault/Scenes/BaridaGamesVault Scene.unity
+    guid: 553006ec4d2b22f4ea4194ca4f1c5c97
   m_configObjects: {}
