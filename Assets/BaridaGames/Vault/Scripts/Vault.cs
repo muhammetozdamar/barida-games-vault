@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -109,42 +108,20 @@ namespace BaridaGames.Vault
             }
             #endregion
             #region Vector3 Values
-            internal Vector3 TryGetVector3Value(string key)
+            internal Vector3 TryGetVector3Value(string key, Vector3 defaultValue = new Vector3())
             {
                 if (vectorValues.TryGetValue(key, out float[] value))
                 {
                     return new Vector3(value[0], value[1], value[2]);
                 }
 
-                vectorValues.Add(key, new float[] { 0, 0, 0 });
-                return new Vector3();
-            }
-
-            internal Vector3 TryGetVector2Value(string key)
-            {
-                if (vectorValues.TryGetValue(key, out float[] value))
-                {
-                    return new Vector2(value[0], value[1]);
-                }
-                vectorValues.Add(key, new float[] { 0, 0 });
-                return new Vector2();
+                vectorValues.Add(key, new float[] { defaultValue.x, defaultValue.y, defaultValue.z });
+                return defaultValue;
             }
 
             internal bool TrySetVector3Value(string key, Vector3 value)
             {
                 float[] _value = new float[] { value.x, value.y, value.z };
-                if (vectorValues.ContainsKey(key))
-                {
-                    vectorValues[key] = _value;
-                    return true;
-                }
-                vectorValues.Add(key, _value);
-                return true;
-            }
-
-            internal bool TrySetVector2Value(string key, Vector2 value)
-            {
-                float[] _value = new float[] { value.x, value.y };
                 if (vectorValues.ContainsKey(key))
                 {
                     vectorValues[key] = _value;
@@ -241,32 +218,131 @@ namespace BaridaGames.Vault
         public static void SaveVault()
         {
             FileStream file;
-            if (File.Exists(FilePath)) file = File.OpenRead(FilePath);
+            if (File.Exists(FilePath)) file = File.OpenWrite(FilePath);
             else file = File.Create(FilePath);
 
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(file, data);
             file.Close();
         }
-
-        public static int GetInt(string key, int defaultValue = 0)
+        #region Int Value
+        public static int GetInt(string key, int defaultValue = default)
         {
-            return data.TryGetIntValue(key);
+            return data.TryGetIntValue(key, defaultValue);
         }
 
-        public static void SetInt(string key, int value)
+        public static bool SetInt(string key, int value)
         {
-            data.TrySetIntValue(key, value);
+            return data.TrySetIntValue(key, value);
         }
 
-        public static void ModifyInt(string key, int amount)
+        public static bool ModifyInt(string key, int amount)
         {
-            data.TrySetIntValue(key, GetInt(key) + amount);
+            return data.TrySetIntValue(key, GetInt(key) + amount);
         }
 
-        public static void DeleteInt(string key)
+        public static bool DeleteInt(string key)
         {
-            data.DeleteIntKey(key);
+            return data.DeleteIntKey(key);
         }
+        #endregion
+        #region Float Value
+        public static float GetFloat(string key, float defaultValue = default)
+        {
+            return data.TryGetFloatValue(key, defaultValue);
+        }
+
+        public static bool SetFloat(string key, float value)
+        {
+            return data.TrySetFloatValue(key, value);
+        }
+
+        public static bool ModifyFloat(string key, float amount)
+        {
+            return data.TrySetFloatValue(key, GetFloat(key) + amount);
+        }
+
+        public static bool DeleteFloat(string key)
+        {
+            return data.DeleteFloatKey(key);
+        }
+        #endregion
+        #region Double Value
+        public static double GetDouble(string key, double defaultValue = default)
+        {
+            return data.TryGetDoubleValue(key, defaultValue);
+        }
+
+        public static bool SetDouble(string key, double value)
+        {
+            return data.TrySetDoubleValue(key, value);
+        }
+
+        public static bool ModifyDouble(string key, double amount)
+        {
+            return data.TrySetDoubleValue(key, GetDouble(key) + amount);
+        }
+
+        public static bool DeleteDouble(string key)
+        {
+            return data.DeleteDoubleKey(key);
+        }
+        #endregion
+        #region Vector Value
+        public static Vector3 GetVector3(string key, Vector3 defaultValue = default)
+        {
+            return data.TryGetVector3Value(key, defaultValue);
+        }
+
+        public static bool SetVector3(string key, Vector3 value)
+        {
+            return data.TrySetVector3Value(key, value);
+        }
+
+        public static bool ModifyVector3(string key, Vector3 amount)
+        {
+            return data.TrySetVector3Value(key, GetVector3(key) + amount);
+        }
+
+        public static bool DeleteVectorKey(string key)
+        {
+            return data.DeleteVectorKey(key);
+        }
+        #endregion
+        #region String Value
+        public static string GetString(string key, string defaultValue = default)
+        {
+            return data.TryGetStringValue(key, defaultValue);
+        }
+
+        public static bool SetString(string key, string value)
+        {
+            return data.TrySetStringValue(key, value);
+        }
+
+        public static bool ModifyString(string key, string amount)
+        {
+            return data.TrySetStringValue(key, GetString(key) + amount);
+        }
+
+        public static bool DeleteString(string key)
+        {
+            return data.DeleteStringKey(key);
+        }
+        #endregion
+        #region Bool Value
+        public static bool GetBool(string key, bool defaultValue = default)
+        {
+            return data.TryGetBoolValue(key, defaultValue);
+        }
+        public static bool SetBool(string key, bool value)
+        {
+            return data.TrySetBoolValue(key, value);
+        }
+        public static bool DeleteBool(string key)
+        {
+            return data.DeleteBoolKey(key);
+        }
+        #endregion
     }
 }
