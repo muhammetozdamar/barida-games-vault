@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BaridaGames.Vault
@@ -214,16 +215,22 @@ namespace BaridaGames.Vault
                 data = new VaultData();
             }
         }
-
-        public static void SaveVault()
+        public static async Task<bool> SaveVault()
         {
-            FileStream file;
-            if (File.Exists(FilePath)) file = File.OpenWrite(FilePath);
-            else file = File.Create(FilePath);
+            return await SerializeDataAsync(new BinaryFormatter());
+        }
 
-            BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(file, data);
-            file.Close();
+        private static async Task<bool> SerializeDataAsync(BinaryFormatter bf)
+        {
+            await Task.Run(() =>
+            {
+                using (FileStream stream = File.Open(FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    bf.Serialize(stream, data);
+                }
+            });
+            Debug.Log("Vault Saved!");
+            return true;
         }
         #region Int Value
         public static int GetInt(string key, int defaultValue = default)

@@ -14,9 +14,4 @@ public class VaultUser : MonoBehaviour
         print("Access string: " + Vault.GetString("0", "string 234"));
         print("Access bool: " + Vault.GetBool("0", false));
     }
-
-    private void Start()
-    {
-        Vault.SaveVault();
-    }
 }
